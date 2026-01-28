@@ -12,6 +12,23 @@ DataAtelier is a lightweight, terminal-based (TUI) application for cleaning up A
 - 🔒 Safely delete files with confirmation and audit trails
 - 📚 Learn from your decisions with few-shot examples
 
+## Quick Start
+
+```bash
+# Install
+pip install -r requirements.txt
+
+# Set up credentials
+export AZURE_STORAGE_CONNECTION_STRING="..."
+export OPENAI_API_KEY="sk-..."
+
+# Run the tool
+python azure_blob_cleanup_tui.py run --container mycontainer
+```
+
+**👉 See [examples/](examples/) for detailed usage examples**  
+**👉 See [tests/](tests/) for integration tests**
+
 ## Features
 
 - **Single TUI Application**: Terminal-based interface drives the entire workflow
@@ -236,15 +253,45 @@ $ blob-cleanup run --container mydata --prefix "temp/"
 # Install dev dependencies
 pip install -e ".[dev]"
 
+# Run tests
+pytest tests/ -v
+
 # Format code
 black .
 
 # Lint
 ruff check .
-
-# Run tests (when added)
-pytest
 ```
+
+**See [tests/README.md](tests/README.md) for testing documentation**
+
+## Examples
+
+Check the [examples/](examples/) directory for:
+- `basic_usage.py` - Quick start guide
+- `manual_mode.py` - No LLM required
+- `with_policy.py` - Custom policy tutorial
+
+Run any example:
+```bash
+python examples/basic_usage.py
+```
+
+## Testing
+
+The project includes comprehensive integration tests with mocked Azure Blob Storage and LLM:
+
+```bash
+# Run all tests (17 tests)
+pytest tests/ -v
+
+# Run specific test class
+pytest tests/test_integration.py::TestStorageIntegration -v
+```
+
+All tests use mocks - no Azure credentials or API keys required!
+
+**See [tests/README.md](tests/README.md) for details**
 
 ## License
 
