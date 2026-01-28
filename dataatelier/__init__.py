@@ -19,7 +19,7 @@ from .blob_cleanup import (
 # New modular components
 from .config import Config
 from .models import QueueEntry, AuditEntry, FewShotExample
-from . import storage, extractors, policy, queue, audit
+from . import storage, extractors, policy, queue, audit, llm, triage, deletion
 
 __all__ = [
     # Legacy blob_cleanup exports
@@ -44,4 +44,7 @@ __all__ = [
     "policy",
     "queue",
     "audit",
+    "llm",
+    "triage",
+    "deletion",
 ]
