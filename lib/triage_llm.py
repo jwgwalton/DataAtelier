@@ -41,7 +41,7 @@ class TriageLLM:
         if use_azure:
             self.client = AzureOpenAI(
                 api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-                api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2023-12-01-preview"),
+                api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01"),
                 azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
             )
         else:
@@ -220,6 +220,9 @@ OUTPUT FORMAT (strict JSON only):
     def _self_consistency_check(self, prompt: str, prediction: Dict) -> bool:
         """Check if multiple LLM calls agree on the label.
         
+        Note: Self-consistency is most effective when temperature > 0 to get varied responses.
+        With temperature=0, this provides verification through redundant calls.
+        
         Args:
             prompt: User prompt
             prediction: Initial prediction
@@ -304,7 +307,7 @@ OUTPUT FORMAT (strict JSON only):
         policy: str,
         few_shot_examples: str,
         blobs: List[Dict],
-        rate_limit_delay: float = 0.5,
+        rate_limit_delay: float = 1.0,
     ) -> List[Dict]:
         """Classify multiple blobs with rate limiting.
         
@@ -312,7 +315,7 @@ OUTPUT FORMAT (strict JSON only):
             policy: Policy text
             few_shot_examples: Formatted examples
             blobs: List of blob dicts with metadata and preview_text
-            rate_limit_delay: Delay between calls in seconds
+            rate_limit_delay: Delay between calls in seconds (default 1.0 for safety)
             
         Returns:
             List of classification results

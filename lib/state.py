@@ -175,8 +175,10 @@ class StateManager:
                 
                 # Check if already exists
                 if not df.empty and item_copy["url"] in df["url"].values:
-                    # Update existing
-                    df.loc[df["url"] == item_copy["url"], :] = pd.Series(item_copy)
+                    # Update existing - replace the entire row
+                    idx = df.index[df["url"] == item_copy["url"]].tolist()[0]
+                    for key, value in item_copy.items():
+                        df.at[idx, key] = value
                 else:
                     # Append new
                     df = pd.concat([df, pd.DataFrame([item_copy])], ignore_index=True)

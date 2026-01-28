@@ -51,7 +51,7 @@ Set up your environment variables:
 # Azure Storage (required)
 export AZURE_STORAGE_CONNECTION_STRING="DefaultEndpointsProtocol=https;AccountName=..."
 # OR
-export AZURE_STORAGE_ACCOUNT_URL="https://youraccout.blob.core.windows.net"
+export AZURE_STORAGE_ACCOUNT_URL="https://youraccount.blob.core.windows.net"
 export AZURE_STORAGE_SAS_TOKEN="?sv=..."  # Optional
 
 # Azure Blob Container (required)

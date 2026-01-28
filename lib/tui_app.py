@@ -6,6 +6,7 @@ import os
 import threading
 from datetime import datetime
 from pathlib import Path
+import time
 from typing import Dict, List, Optional
 
 from textual import on, work
@@ -241,6 +242,7 @@ class BlobCleanupApp(App):
         triage_llm: Optional[TriageLLM] = None,
         container_name: str = "",
         prefix: str = "",
+        worker_delay: int = 30,
     ):
         super().__init__()
         self.storage_io = storage_io
@@ -250,6 +252,7 @@ class BlobCleanupApp(App):
         self.triage_llm = triage_llm
         self.container_name = container_name
         self.prefix = prefix
+        self.worker_delay = worker_delay
         
         self.current_queue = "review"
         self.worker_running = False
@@ -404,7 +407,13 @@ class BlobCleanupApp(App):
             self.notify("No item selected", severity="warning")
             return
         
-        row_key = table.get_row_at(table.cursor_row)[0]
+        # Get the row key (URL) from the table's coordinate system
+        try:
+            row_key = table.coordinate_to_cell_key(table.Coordinate(table.cursor_row, 0)).row_key
+        except Exception:
+            self.notify("Error getting row key", severity="error")
+            return
+        
         if not row_key:
             return
         
@@ -454,7 +463,13 @@ class BlobCleanupApp(App):
             self.notify("No item selected", severity="warning")
             return
         
-        row_key = table.get_row_at(table.cursor_row)[0]
+        # Get the row key (URL) from the table's coordinate system
+        try:
+            row_key = table.coordinate_to_cell_key(table.Coordinate(table.cursor_row, 0)).row_key
+        except Exception:
+            self.notify("Error getting row key", severity="error")
+            return
+        
         if not row_key:
             return
         
@@ -674,8 +689,7 @@ Queue Breakdown:
                     logger.error(f"Worker error: {e}")
                 
                 # Sleep between batches
-                import time
-                time.sleep(30)
+                time.sleep(self.worker_delay)
         
         self.worker_thread = threading.Thread(target=worker_loop, daemon=True)
         self.worker_thread.start()

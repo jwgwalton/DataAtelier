@@ -82,7 +82,7 @@ def inventory_blobs(
         # Add previews for text files
         console.print("\n⏳ Generating previews...")
         for i, blob in enumerate(blobs):
-            if (i + 1) % 10 == 0:
+            if (i + 1) % 10 == 0 or (i + 1) == len(blobs):
                 console.print(f"   Progress: {i + 1}/{len(blobs)}")
             
             # Check if text content
@@ -181,7 +181,8 @@ def run(
     # Validate container
     if not container:
         console.print("[red]Error: --container is required[/red]")
-        console.print("Set AZURE_BLOB_CONTAINER environment variable or use --container option")
+        console.print("Usage: python azure_blob_cleanup_tui.py run --container CONTAINER_NAME")
+        console.print("Or set AZURE_BLOB_CONTAINER environment variable")
         sys.exit(1)
     
     # Validate Azure credentials
