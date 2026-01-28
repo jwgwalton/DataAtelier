@@ -20,6 +20,17 @@ from .blob_cleanup import (
 from .config import Config
 from .models import QueueEntry, AuditEntry, FewShotExample
 from . import storage, extractors, policy, queue, audit, llm, triage, deletion
+from .cleanup import BlobCleanup
+
+# UI components (optional - only if ipywidgets is available)
+try:
+    from .ui import ReviewUI as ModularReviewUI, ProgressDisplay, create_progress_widget
+    UI_AVAILABLE = True
+except ImportError:
+    UI_AVAILABLE = False
+    ModularReviewUI = None
+    ProgressDisplay = None
+    create_progress_widget = None
 
 __all__ = [
     # Legacy blob_cleanup exports
@@ -39,6 +50,7 @@ __all__ = [
     "QueueEntry",
     "AuditEntry",
     "FewShotExample",
+    "BlobCleanup",
     "storage",
     "extractors",
     "policy",
@@ -48,3 +60,7 @@ __all__ = [
     "triage",
     "deletion",
 ]
+
+# Add UI components if available
+if UI_AVAILABLE:
+    __all__.extend(["ModularReviewUI", "ProgressDisplay", "create_progress_widget"])
